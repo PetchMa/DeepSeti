@@ -2,7 +2,7 @@ from models import DeepSeti_Model
 from load import load
 from label import label
 from train import train
-
+from test import test
 
 import tensorflow as tf 
 from keras.models import Sequential 
@@ -65,6 +65,9 @@ class DeepSeti():
         train_model = train()
         history = train.train_model(model,X_train,y_train,X_test, y_test,  batch_size, epoch, file_name)
         train.plot_graph(history)
+    def test(self, model, test_true, test_false):
+        test = test()
+        test.test_execute(model, test_true, test_false)
     
     
     
