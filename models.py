@@ -23,13 +23,16 @@ class DeepSeti_Model():
     def __init__(self):
         self.on = True
     def CNNLSTM(dataset_shape, kernel, epoch, learning_rate, cnn_layers, lstm_layers, fully_connected,rate, time):
+        LR = LeakyReLU(0.3)
+        LR.__name__ = 'relu'
         input_shape = dataset_shape
         kernel = kernel
         epoch = epoch
         learning_rate = learning_rate
         model = Sequential()
+        model.add(Convolution1D(32*i, kernel_size = kernel, strides=1, padding='same', input_shape=input_shape ))
         for i in range(1,cnn_layers):
-            model.add(Convolution1D(32*i, kernel_size = kernel, strides=1, padding='same', input_shape=input_shape ))
+            model.add(Convolution1D(32*i, kernel_size = kernel, strides=1, padding='same'))
             model.add(LR)
             model.add(MaxPooling1D(pool_size=(2)))
             model.add(Dropout(0.5))
@@ -42,8 +45,7 @@ class DeepSeti_Model():
             model.add(Dropout(0.5))
         for c in range(1,fully_connected)
             model.add(Dense(int(rate*time/c), activation=LR))
-            model.add(Dropout(0.5))
-            
+            model.add(Dropout(0.5))    
         model.add(Dense(2 , activation='sigmoid'))
         model.summary()
         print(learning_rate/epoch)
@@ -53,20 +55,23 @@ class DeepSeti_Model():
 
         return model
     def CNN(dataset_shape, kernel, epoch, learning_rate, cnn_layers, fully_connected,rate, time):
+        LR = LeakyReLU(0.3)
+        LR.__name__ = 'relu'
         input_shape = dataset_shape
         kernel = kernel
         epoch = epoch
         learning_rate = learning_rate
         model = Sequential()
+        model.add(Convolution1D(32*i, kernel_size = kernel, strides=1, padding='same', input_shape=input_shape ))
         for i in range(1,cnn_layers):
-            model.add(Convolution1D(32*i, kernel_size = kernel, strides=1, padding='same', input_shape=input_shape ))
+            model.add(Convolution1D(32*i, kernel_size = kernel, strides=1, padding='same'))
             model.add(LR)
             model.add(MaxPooling1D(pool_size=(2)))
             model.add(Dropout(0.5))
         for c in range(1,fully_connected)
             model.add(Dense(int(rate*time/c), activation=LR))
             model.add(Dropout(0.5))
-            
+
         model.add(Dense(2 , activation='sigmoid'))
         model.summary()
         print(learning_rate/epoch)
@@ -75,6 +80,8 @@ class DeepSeti_Model():
         model.compile(loss='binary_crossentropy', optimizer=sgd, metrics=["accuracy"])
         return model
     def LSTM(dataset_shape, epoch, learning_rate, lstm_layers, lstm_units, fully_connected,rate, time):
+        LR = LeakyReLU(0.3)
+        LR.__name__ = 'relu'
         input_shape = dataset_shape
         epoch = epoch
         learning_rate = learning_rate

@@ -26,3 +26,4 @@ class load():
             print(str(i)+" files have been loaded")
         dataset[i][:][:] = audioRead.read(folder+'/'+str(i+1)+'.wav', rate, True)
         print("Tensor shape: "+ str(dataset.shape))
+        return dataset
