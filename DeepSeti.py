@@ -1,13 +1,14 @@
-from DeepSearch.model import model
-from DeepSearch.train import train 
-from DeepSearch.classification import classification
-from DeepSearch.synthetic import synthetic 
-from DeepSearch.classification import classification
-from DeepSearch.save_model import save_model 
-from DeepSearch.preprocessing import DataProcessing as dp
+from DeepSeti.model import model
+from DeepSeti.train import train 
+from DeepSeti.classification import classification
+from DeepSeti.synthetic import synthetic 
+from DeepSeti.classification import classification
+from DeepSeti.save_model import save_model 
+from DeepSeti.preprocessing import DataProcessing as dp
 from keras.models import load_model
 from keras.models import Model
 from keras.layers import Input
+import pylab as plt
 
 import keras 
 
@@ -44,8 +45,19 @@ class DeepSeti(object):
         save = save_model()
         save.save(train)
 
-    def prediction(self, location, files, anchor):
+    def prediction(self, model_location, test_location, anchor_location, top_hits):
+        dp = dp()
+        anchor = dp.load_data(anchor_location)
+        self.test = dp.load_data(test_location)
+        predict = predict(anchor = anchor , test=self.test, model_location=model_location)
+        self.values = predict.compute_distance()
+        self.hits = predict.max_index(top_hits)
+        
+        for i in range(0,top_hits):
+            fig = plt.figure(figsize=(10, 6))
+            plt.imshow(self.test[self.hits[i],:,0,:], aspect='auto')
+            plt.colorbar()
+            fig.savefig("top_hit"+str(i)+".PNG", bbox_inches='tight')
 
-        predict = predict(anchor = self.X_test_supervised, test=X_test_supervised, model_location="/content/encoder_injected_model (1).h5")
-        values = predict.compute_distance()
+
 
