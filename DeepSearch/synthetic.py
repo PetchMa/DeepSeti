@@ -8,7 +8,7 @@ from astropy import units as u
 from matplotlib import pyplot as plt
 import setigen as stg
 
-class synthetic (self):
+class synthetic(object):
     def __init__(self):
         self.name = "synthetic generator"
     def generate(self, total_num_samples, data, intensity = 0.7, test=False, labels= True):
@@ -54,18 +54,16 @@ class synthetic (self):
                 fig = plt.figure(figsize=(10, 6))
                 plt.imshow(generated_signals[i,:,0,:], aspect='auto')
                 plt.colorbar()
-        if labels:
-            # Label the dataset
-            supervised_true =  np.concatenate((np.ones((generated_signals.shape[0],1),dtype='int64'),np.zeros((generated_signals.shape[0],1),dtype='int64')), axis=1)
-            supervised_false = np.concatenate((np.zeros((total_num_samples,1),dtype='int64'),np.ones((total_num_samples,1),dtype='int64')), axis=1)
-            label = np.concatenate((supervised_true, supervised_false))
-            supervised_dataset = np.concatenate((generated_signals, data[0:total_num_samples,:,:,:]))
-            print(label.shape)
-            print(supervised_dataset.shape)
-            print("Synethtic Generation Execution Time: "+ str(time.time()-start))
-            return supervised_dataset, label
+ 
+        # Label the dataset
+        supervised_true =  np.concatenate((np.ones((generated_signals.shape[0],1),dtype='int64'),np.zeros((generated_signals.shape[0],1),dtype='int64')), axis=1)
+        supervised_false = np.concatenate((np.zeros((total_num_samples,1),dtype='int64'),np.ones((total_num_samples,1),dtype='int64')), axis=1)
+        label = np.concatenate((supervised_true, supervised_false))
+        supervised_dataset = np.concatenate((generated_signals, data[0:total_num_samples,:,:,:]))
+        print(label.shape)
+        print(supervised_dataset.shape)
+        print("Synethtic Generation Execution Time: "+ str(time.time()-start))
+        return supervised_dataset, label
 
-        else:
-
-            return generated_signals
+       
     

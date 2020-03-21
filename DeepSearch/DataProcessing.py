@@ -7,7 +7,7 @@ import pylab as plt
 from astropy import units as u
 from matplotlib import pyplot as plt
 
-class DataProcessing(self):
+class DataProcessing(object):
     """
     Note: ONLY ACCEPTS MID RES FILES!!!!!!!
 
@@ -18,10 +18,11 @@ class DataProcessing(self):
     
     returns numpy array
     """
-    def __init__(self, directory=None, maxLoad=None):
-        self.maxLoad = 1
+    def __init__(self):
+        self.name = 'name'
 
-    def load_data(self, file_location, normalize = False):
+    def load_data(self, file_location, normalize = True):
+        print("starting load")
         start = time.time()
         """
         Single data file load. 
@@ -37,10 +38,9 @@ class DataProcessing(self):
         if file_location == 'none':
             return None
         else:
-            file_path =self.directory
-            obs = Waterfall(file_path, max_load=self.maxLoad)
+            file_path =file_location
+            obs = Waterfall(file_path, max_load=1)
             data = obs.data
-            print(data.shape)
             data_temp = np.zeros((8,32, 1, data.shape[2]))
             intervals = [0,32,64,96,128,160,192,224]
             count=0
@@ -69,8 +69,6 @@ class DataProcessing(self):
                 data = data/ 5906562547.712
             return data
 
-
-
     def load_multiple_files(self, list_directory, normalize=None, test_image = False):
         """
         Load multiple data files. Uses single loading method to handle data processing
@@ -83,8 +81,8 @@ class DataProcessing(self):
         tchans = 256
         data = np.zeros((1,32,1,32))
         for i in range(0, num_files):
-            data_temp = load_data( list_directory[i], normalize = True)
-            data = np.concatenate((data_temp,data), axis=1)
+            data_temp = self.load_data( list_directory[i], normalize = True)
+            data = np.concatenate((data_temp,data), axis=0)
         
         if test_image:
             fig = plt.figure(figsize=(10, 6))
