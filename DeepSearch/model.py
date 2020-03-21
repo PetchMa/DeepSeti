@@ -103,7 +103,7 @@ class model(object):
             return encoder
         
     def feature_classification(self):
-        latent_inputs = Input(shape=(self.shape[1],self.shape[2]), name='fully_connected_inputs')
+        latent_inputs = Input(shape=(self.shape_1[1],self.shape_1[2]), name='fully_connected_inputs')
         x = Flatten()(latent_inputs)
         x = Dense(64)(x)
         x = LeakyReLU(alpha=0.2)(x)
@@ -113,7 +113,7 @@ class model(object):
         return fully_connected
 
     def latent_encode(self):
-        latent_inputs = Input(shape=(self.shape[1],self.shape[2]), name='fully_connected_inputs')
+        latent_inputs = Input(shape=(self.shape_1[1],self.shape_1[2]), name='fully_connected_inputs')
         x = Flatten()(latent_inputs)
         x = Dense(64)(x)
         x = LeakyReLU(alpha=0.2)(x)
