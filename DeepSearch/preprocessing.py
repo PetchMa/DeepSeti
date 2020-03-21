@@ -6,6 +6,8 @@ from blimpy import Waterfall
 import pylab as plt
 from astropy import units as u
 from matplotlib import pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.utils import shuffle
 
 class DataProcessing(object):
     """
@@ -22,7 +24,6 @@ class DataProcessing(object):
         self.name = 'name'
 
     def load_data(self, file_location, normalize = True):
-        print("starting load")
         start = time.time()
         """
         Single data file load. 
@@ -47,11 +48,13 @@ class DataProcessing(object):
             for k in intervals: 
                 data_temp[count,:,:,:]=data[k:k+32,:,:]
                 count+=1
-            data = np.zeros((8*int(data.shape[2]/32),32,1,32))
             total_samples = 8*int(data.shape[2]/32)
+            data = np.zeros((8*int(data.shape[2]/32),32,1,32))
+            
             # print(data6.shape)
             i=0
             count=0
+            
             while i<total_samples:
                 # print(data_temp[0,:,:,32*i:(i+1)*32].shape)
                 data[i,:,:,:]= data_temp[0,:,:,32*count:(1+count)*32]
@@ -64,7 +67,9 @@ class DataProcessing(object):
                 data[i+7,:,:,:]= data_temp[7,:,:,32*count:(1+count)*32]
                 count+=1
                 i=i+8
-            print("Single Data load Execution: "+str(time.time()-start)+ " Sec")
+            
+            print("single Data load Execution: "+str(time.time()-start)+ " Sec")
+            
             if normalize:
                 data = data/ 5906562547.712
             return data
@@ -88,4 +93,8 @@ class DataProcessing(object):
             fig = plt.figure(figsize=(10, 6))
             plt.imshow(data[78848-1000,:,:,:],  aspect='auto')
             plt.colorbar()
-        return data[1:,:,:,:]
+        
+        unsupervised_temp = shuffle(data[1:,:,:,:], random_state=3)
+        X_train_unsupervised, X_test_unsupervised, y_train_unsupervised, y_test_unsupervised = train_test_split(unsupervised_temp, unsupervised_temp, test_size=0.2, random_state=2)
+        return X_train_unsupervised, X_test_unsupervised
+        # return data[1:,:,:,:]

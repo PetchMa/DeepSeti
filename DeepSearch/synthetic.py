@@ -7,12 +7,13 @@ import pylab as plt
 from astropy import units as u
 from matplotlib import pyplot as plt
 import setigen as stg
+from sklearn.model_selection import train_test_split
 
 class synthetic(object):
     def __init__(self):
         self.name = "synthetic generator"
     def generate(self, total_num_samples, data, intensity = 0.7, test=False, labels= True):
-        start = time.time()
+        start_time = time.time()
         num_channels = 32
         # Prepare the target set
         fchans = num_channels
@@ -62,8 +63,10 @@ class synthetic(object):
         supervised_dataset = np.concatenate((generated_signals, data[0:total_num_samples,:,:,:]))
         print(label.shape)
         print(supervised_dataset.shape)
-        print("Synethtic Generation Execution Time: "+ str(time.time()-start))
-        return supervised_dataset, label
+        print("Synethtic Generation Execution Time: "+ str(time.time()-start_time))
+
+        X_train_supervised, X_test_supervised, y_train_supervised, y_test_supervised = train_test_split(supervised_dataset, label, test_size=0.2, random_state=2)
+        return X_train_supervised, X_test_supervised, y_train_supervised, y_test_supervised 
 
        
     
