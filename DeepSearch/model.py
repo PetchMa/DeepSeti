@@ -33,10 +33,10 @@ class model(object):
         self.kernel_size = kernel_size
         self.data_shape = data_shape
 
-    def encoder(self, data_shape):
+    def encoder(self):
         layer_filters = [32,64,128]
         latent_dim = self.latent_dim
-        time = int(data_shape)
+        time = int(self.data_shape[0])
         filters = layer_filters[1]*2
 
         inputs = Input(shape=self.data_shape, name='encoder_input')
@@ -76,18 +76,18 @@ class model(object):
         fully_connected = Model(latent_inputs, x, name='encoder')
         return fully_connected
 
-    def latent_encode(self, latent_dim):
+    def latent_encode(self):
         latent_inputs = Input(shape=(self.shape[1],self.shape[2]), name='fully_connected_inputs')
         x = Flatten()(latent_inputs)
         x = Dense(64)(x)
         x = LeakyReLU(alpha=0.2)(x)
-        x = Dense(latent_dim)(x)
+        x = Dense(self.latent_dim)(x)
         x = LeakyReLU(alpha=0.2)(x)
         feature_encode = Model(latent_inputs, x, name='encoder')
 
     def decoder(self):
         layer_filters = [32, 64, 128]
-        latent_inputs = Input(shape=(latent_dim,), name='decoder_input')
+        latent_inputs = Input(shape=(self.latent_dim,), name='decoder_input')
         x = Dense(64)(latent_inputs)
         x = LeakyReLU(alpha=0.2)(x)
         x = Dense(shape[1] * shape[2])(x)
