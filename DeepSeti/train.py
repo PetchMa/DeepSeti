@@ -12,11 +12,15 @@ from keras import backend as K
 from  keras.backend import expand_dims
 from keras.callbacks import EarlyStopping, ModelCheckpoint
 from keras.models import load_model
+
 class train(object):
     def __init__(self):
         self.name="name"
-    
-    def train_model(self, epoch, inputs, encode, feature_encode, decoder, latent_encode, X_train_unsupervised, X_test_unsupervised, X_train_supervised, X_test_supervised, y_train_supervised, y_test_supervised, batch_size=4096):
+        
+    def train_model(self, epoch, inputs, encode, feature_encode, decoder, latent_encode, 
+                X_train_unsupervised, X_test_unsupervised, X_train_supervised, 
+                X_test_supervised, y_train_supervised, y_test_supervised, batch_size=4096):
+
         encoder_final = Model(inputs, feature_encode(encode(inputs)), name='encoder_training')
         AutoEncoder= Model(inputs, decoder(latent_encode(encode(inputs))), name='autoencoder')
         history_encoder_tracker = np.zeros((epoch))
