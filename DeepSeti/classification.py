@@ -15,7 +15,6 @@ from random import random
 from keras.callbacks import EarlyStopping, ModelCheckpoint
 
 
-
 class predict(object):
 
     def __init__(self, anchor, test, model_location):
@@ -29,8 +28,7 @@ class predict(object):
         anchor = self.encoder_injected.predict(self.anchor)
         for j in range(0, self.test.shape[0]-1):
             index = int(random()*10)
-            self.values[j]=(np.square(np.subtract(anchor[index:index+1,:], check[j:j+1,:]))).mean()
-            
+            self.values[j]=(np.square(np.subtract(anchor[index:index+1,:], check[j:j+1,:]))).mean()   
         return self.values
     
     def max_index(self, top=3):
