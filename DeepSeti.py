@@ -1,10 +1,10 @@
-from DeepSeti.model import model
-from DeepSeti.train import train 
-from DeepSeti.classification import classification
-from DeepSeti.synthetic import synthetic 
-from DeepSeti.classification import classification
-from DeepSeti.save_model import save_model 
-from DeepSeti.preprocessing import DataProcessing as dp
+from DeepSeti_utils.model import model
+from DeepSeti_utils.train import train 
+from DeepSeti_utils.classification import classification
+from DeepSeti_utils.synthetic import synthetic 
+from DeepSeti_utils.classification import classification
+from DeepSeti_utils.save_model import save_model 
+from DeepSeti_utils.preprocessing import DataProcessing as dp
 from keras.models import load_model
 from keras.models import Model
 from keras.layers import Input
@@ -22,7 +22,8 @@ class DeepSeti(object):
 
     def supervised_data(self, list_directory):
         self.X_train_unsupervised, self.X_test_unsupervised = self.unsupervised_data(list_directory)
-        self.X_train_supervised, self.X_test_supervised, self.y_train_supervised, self.y_test_supervised  = synthetic.generate(total_num_samples= 5000, data = X_train_unsupervised)
+        self.X_train_supervised, self.X_test_supervised, self.y_train_supervised, self.y_test_supervised  = synthetic.generate(total_num_samples= 5000, 
+                                                                                                                                data = self.X_train_unsupervised)
 
     def encoder_injection_model_defualt_create(self):
         mod = model(latent_dim=64, kernel_size=(3,3), data_shape=self.X_train_unsupervised[0].shape, layer_filters =[32,64,128], CuDNNLSTM=True)
@@ -34,7 +35,8 @@ class DeepSeti(object):
 
     def train_custom_data(self):
         train_obj = train()
-        train = train_obj.train_model( epoch=5, inputs=self.inputs, encode = self.encode, feature_encode=self.feature_classification, 
+        train = train_obj.train_model( epoch=5, inputs=self.inputs, encode = self.encode, 
+                                                    feature_encode=self.feature_classification, 
                     decoder=self.decoder, latent_encode=self.latent_encode
                     , X_train_unsupervised=self.X_train_unsupervised
                     , X_test_unsupervised=self.X_test_unsupervised
