@@ -21,6 +21,14 @@ This deep learning algorithm uses a novel technique developed for specific SETI 
 <img src="https://github.com/PetchMa/DeepSeti/blob/master/assets/image%20(3).png">
 </p>
 
+# Results 
+From current tests done on new data, it was able to generalize to a variety of usecases. The image below shows how sensitive the algorithm is to small and weak beams across multiple channels. Despite never being trained on the sinusoid beam on the left [sample A], it was able to detect the anomoly out of the dataset. This shows promise in the intended use case of the algorithm. 
+
+<p align="center"> 
+<img src="https://github.com/PetchMa/DeepSeti/blob/master/assets/image%20(4).png">
+</p>
+
+
 # How To Use The Algorithm 
 
 Some features are still under construction, however you can test the current powers of this algorithm following this simple guide below. ** Note: This will require Blimpy and Setigen to opperate properly.** Install these requirements by running the following commands in the terminal in your python enviroment. 
@@ -42,6 +50,7 @@ Once you're within the cloned folder, copy the code block into a new python scri
 
 
 ```python
+from DeepSeti import DeepSeti
 
 direct = ['/-Your directory-/data.h5',
           '/-Your directory-/data2.h5',
@@ -61,6 +70,4 @@ DeepSeti.prediction(model_location="model.h5", test_location="data1.h5",
 
 ```
 
-<p align="center"> 
-<img src="https://github.com/PetchMa/DeepSeti/blob/master/assets/image%20(4).png">
-</p>
+
