@@ -56,6 +56,11 @@ class DeepSeti(object):
         self.values = predict.compute_distance()
         self.hits = predict.max_index(top_hits)
         
+        fig = plt.figure(figsize=(20, 6))
+        plt.plot(self.values)
+        plt.xlabel("Number Of Samples")
+        plt.ylabel("Euclidean Distance")
+        
         for i in range(0,top_hits):
             fig = plt.figure(figsize=(10, 6))
             plt.imshow(self.test[self.hits[i],:,0,:], aspect='auto')
