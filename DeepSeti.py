@@ -1,7 +1,7 @@
 from DeepSeti_utils.model import model
-from DeepSeti_utils.train import train 
+from DeepSeti_utils.train import train as training
 from DeepSeti_utils.synthetic import synthetic 
-from DeepSeti_utils.predict import predict
+from DeepSeti_utils.predict import predict as prediction_algo
 from DeepSeti_utils.save_model import save_model 
 from DeepSeti_utils.preprocessing import DataProcessing as DataProcessing
 from keras.models import load_model
@@ -21,9 +21,9 @@ class DeepSeti(object):
 
     def supervised_data(self, list_directory):
         # self.X_train_unsupervised, self.X_test_unsupervised = self.unsupervised_data(list_directory= list_directory)
-        self.X_train_supervised, self.X_test_supervised, self.y_train_supervised, self.y_test_supervised  = synthetic.generate(total_num_samples= 5000, 
+        synth = synthetic()
+        self.X_train_supervised, self.X_test_supervised, self.y_train_supervised, self.y_test_supervised  = synth.generate(total_num_samples= 5000, 
                                                                                                                                 data = self.X_train_unsupervised[0:10000,:,:,:])
-
     def encoder_injection_model_defualt_create(self):
         mod = model(latent_dim=64, kernel_size=(3,3), data_shape=self.X_train_unsupervised[0].shape, layer_filters =[32,64,128], CuDNNLSTM=True)
         self.encode = mod.encoder()
@@ -33,7 +33,7 @@ class DeepSeti(object):
         self.inputs = Input(shape=self.X_train_unsupervised[0].shape, name='input')
 
     def train_custom_data(self):
-        train_obj = train()
+        train_obj = training()
         train = train_obj.train_model( epoch=5, inputs=self.inputs, encode = self.encode, 
                                                     feature_encode=self.feature_classification, 
                     decoder=self.decoder, latent_encode=self.latent_encode
@@ -47,10 +47,12 @@ class DeepSeti(object):
         save.save(train)
 
     def prediction(self, model_location, test_location, anchor_location, top_hits):
-        dp = dp()
+
+        dp = DataProcessing()
         anchor = dp.load_data(anchor_location)
         self.test = dp.load_data(test_location)
-        predict = predict(anchor = anchor , test=self.test, model_location=model_location)
+        predict = prediction_algo(anchor = anchor , test=self.test, model_location=model_location)
+        # predict(anchor = anchor , test=self.test, model_location=model_location)
         self.values = predict.compute_distance()
         self.hits = predict.max_index(top_hits)
         
