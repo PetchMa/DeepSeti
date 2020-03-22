@@ -21,7 +21,7 @@ What makes this algorithm unique is that it *injects* an encoder, thats been pre
 </p>
 
 # Preliminary - Results 
-From current tests done on new data, it was able to generalize to a variety of usecases. The image below shows how sensitive the algorithm is to small and weak beams across multiple channels. Despite never being trained on the sinusoid beam on the left [sample A], it was able to detect the anomoly out of the dataset. This shows promise in the intended use case of the algorithm. 
+From current tests done on new data, it was able to generalize to a variety of usecases. The image below shows how sensitive the algorithm is to small and weak beams across multiple channels. Despite never being trained on the sinusoid beam on the left [sample A], it was able to detect the anomaly out of the dataset. This shows promise in the intended use case of the algorithm. 
 
 <p align="center"> 
 <img src="https://github.com/PetchMa/DeepSeti/blob/master/assets/image%20(4).png">
