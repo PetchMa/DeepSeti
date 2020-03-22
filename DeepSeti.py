@@ -1,10 +1,9 @@
 from DeepSeti_utils.model import model
 from DeepSeti_utils.train import train 
-from DeepSeti_utils.classification import classification
 from DeepSeti_utils.synthetic import synthetic 
-from DeepSeti_utils.classification import classification
+from DeepSeti_utils.predict import predict
 from DeepSeti_utils.save_model import save_model 
-from DeepSeti_utils.preprocessing import DataProcessing as dp
+from DeepSeti_utils.preprocessing import DataProcessing as DataProcessing
 from keras.models import load_model
 from keras.models import Model
 from keras.layers import Input
@@ -17,13 +16,13 @@ class DeepSeti(object):
         self.name="Deep Seti"
     
     def unsupervised_data(self, list_directory):
-        dp = dp()
+        dp = DataProcessing()
         self.X_train_unsupervised, self.X_test_unsupervised = dp.load_multiple_files(list_directory=list_directory)
 
     def supervised_data(self, list_directory):
-        self.X_train_unsupervised, self.X_test_unsupervised = self.unsupervised_data(list_directory)
+        # self.X_train_unsupervised, self.X_test_unsupervised = self.unsupervised_data(list_directory= list_directory)
         self.X_train_supervised, self.X_test_supervised, self.y_train_supervised, self.y_test_supervised  = synthetic.generate(total_num_samples= 5000, 
-                                                                                                                                data = self.X_train_unsupervised)
+                                                                                                                                data = self.X_train_unsupervised[0:10000,:,:,:])
 
     def encoder_injection_model_defualt_create(self):
         mod = model(latent_dim=64, kernel_size=(3,3), data_shape=self.X_train_unsupervised[0].shape, layer_filters =[32,64,128], CuDNNLSTM=True)
