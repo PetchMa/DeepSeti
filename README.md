@@ -21,13 +21,18 @@ This deep learning algorithm uses a novel technique developed for specific SETI 
 <img src="https://github.com/PetchMa/DeepSeti/blob/master/assets/image%20(3).png">
 </p>
 
-# Results 
+# Preliminary - Results 
 From current tests done on new data, it was able to generalize to a variety of usecases. The image below shows how sensitive the algorithm is to small and weak beams across multiple channels. Despite never being trained on the sinusoid beam on the left [sample A], it was able to detect the anomoly out of the dataset. This shows promise in the intended use case of the algorithm. 
 
 <p align="center"> 
 <img src="https://github.com/PetchMa/DeepSeti/blob/master/assets/image%20(4).png">
 </p>
 
+The example detection is made by taking the MSE / euclidean distance between the two vectors, an anchor vector and a unknown vector. These spikes within the data are seen as anomolies by the algorithm giving us these two detections. 
+
+<p align="center"> 
+<img src="https://github.com/PetchMa/DeepSeti/blob/master/assets/image%20(5).png">
+</p>
 
 # How To Use The Algorithm 
 
