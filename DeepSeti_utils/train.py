@@ -45,7 +45,7 @@ class train(object):
             # AutoEncoder.compile(loss='mean_squared_error', optimizer=sgd_unsupervised,  metrics=['acc'])
 
             mc = ModelCheckpoint('model.h5', monitor='val_loss', mode='min', save_best_only=True)
-            history_unsupervised = AutoEncoder.fit(X_train_unsupervised, X_train_unsupervised,  batch_size=8192, epochs=1, 
+            history_unsupervised = AutoEncoder.fit(X_train_unsupervised, X_train_unsupervised,  batch_size=batch_size, epochs=1, 
                 validation_data=(X_test_unsupervised, X_test_unsupervised), callbacks=[mc])
         # encoder_injected = Model(inputs, feature_encode(encoder(inputs)), name='Generator')
         # model_freezed = self.freeze_layers(encoder_injected)

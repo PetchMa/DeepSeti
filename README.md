@@ -65,13 +65,15 @@ DeepSeti.unsupervised_data(direct)
 
 DeepSeti.supervised_data(direct)
 
-DeepSeti.encoder_injection_model_defualt_create()
 
-DeepSeti.train_custom_data()
+DeepSeti.encoder_injection_model_defualt_create(CuDNNLSTM=True)
+
+DeepSeti.train_custom_data(epoch=160, batch=20000)
 # NOTE: Loading the CUDDA model will require cudda supported devices + CUDDANN installed 
 # If you wish run without CUDDA accelerated devices use "encoder_injection_model(1).h5" INSTEAD 
 DeepSeti.prediction(model_location="encoder_injection_model_cudda.h5", test_location="data1.h5", 
                     anchor_location="data2.h5", top_hits=4)
+
 
 ```
 This example will search for the top 4 candidates and return saved images of these candidates. => Currently working on a way to give specific frequency ranges for its detection. In the works! 
