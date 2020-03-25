@@ -24,8 +24,8 @@ class DeepSeti(object):
         synth = synthetic()
         self.X_train_supervised, self.X_test_supervised, self.y_train_supervised, self.y_test_supervised  = synth.generate(total_num_samples= 5000, 
                                                                                                                                 data = self.X_train_unsupervised[0:10000,:,:,:])
-    def encoder_injection_model_defualt_create(self):
-        mod = model(latent_dim=64, kernel_size=(3,3), data_shape=self.X_train_unsupervised[0].shape, layer_filters =[32,64,128], CuDNNLSTM=True)
+    def encoder_injection_model_defualt_create(self, CuDNNLSTM):
+        mod = model(latent_dim=64, kernel_size=(3,3), data_shape=self.X_train_unsupervised[0].shape, layer_filters =[32,64,128], CuDNNLSTM=CuDNNLSTM)
         self.encode = mod.encoder()
         self.feature_classification = mod.feature_classification()
         self.latent_encode = mod.latent_encode()
