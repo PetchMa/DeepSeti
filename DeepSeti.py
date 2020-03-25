@@ -32,10 +32,10 @@ class DeepSeti(object):
         self.decoder = mod.decoder()
         self.inputs = Input(shape=self.X_train_unsupervised[0].shape, name='input')
 
-    def train_custom_data(self, epoch):
+    def train_custom_data(self, epoch, save_file=True):
         train_obj = training()
         train = train_obj.train_model( epoch=epoch, inputs=self.inputs, encode = self.encode, 
-                                                    feature_encode=self.feature_classification, 
+                    feature_encode=self.feature_classification, 
                     decoder=self.decoder, latent_encode=self.latent_encode
                     , X_train_unsupervised=self.X_train_unsupervised
                     , X_test_unsupervised=self.X_test_unsupervised
@@ -43,8 +43,9 @@ class DeepSeti(object):
                     , X_test_supervised=self.X_test_supervised
                     , y_train_supervised=self.y_train_supervised,
                     y_test_supervised=self.y_test_supervised)
-        save = save_model()
-        save.save(train)
+        if save_file:
+            save = save_model()
+            save.save(train)
 
     def prediction(self, model_location, test_location, anchor_location, top_hits):
 
