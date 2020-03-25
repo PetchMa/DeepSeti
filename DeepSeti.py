@@ -32,9 +32,9 @@ class DeepSeti(object):
         self.decoder = mod.decoder()
         self.inputs = Input(shape=self.X_train_unsupervised[0].shape, name='input')
 
-    def train_custom_data(self):
+    def train_custom_data(self, epoch):
         train_obj = training()
-        train = train_obj.train_model( epoch=5, inputs=self.inputs, encode = self.encode, 
+        train = train_obj.train_model( epoch=epoch, inputs=self.inputs, encode = self.encode, 
                                                     feature_encode=self.feature_classification, 
                     decoder=self.decoder, latent_encode=self.latent_encode
                     , X_train_unsupervised=self.X_train_unsupervised
