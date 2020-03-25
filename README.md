@@ -50,7 +50,7 @@ Following that all you need to do is clone the repository, and navigate into the
 git clone https://github.com/PetchMa/DeepSeti.git
 ```
 
-Once you're within the cloned folder, copy the code block into a new python script. Fill in the mising directories, and you can train a model on your custom data. **Note: you can also load a pretrained model called *encoder_injection_model(1).h5* which has been trained on 500,000 radio samples**
+Once you're within the cloned folder, copy the code block into a new python script. Fill in the mising directories, and you can train a model on your custom data. **Note: you can also load a pretrained model called *encoder_injection_model_cudda.h5* which has been trained on 500,000 radio samples. Keep in mind this requires CUDDA supported devices + drivers. Try the vanillia encoder_injection_model(1).h5 without Cudda support.**
 
 
 ```python
@@ -60,7 +60,6 @@ direct = ['/-Your directory-/data.h5',
           '/-Your directory-/data2.h5',
           '/-Your directory-/data3.h5'
           ]
-
 DeepSeti = DeepSeti()
 DeepSeti.unsupervised_data(direct)
 
@@ -69,7 +68,9 @@ DeepSeti.supervised_data(direct)
 DeepSeti.encoder_injection_model_defualt_create()
 
 DeepSeti.train_custom_data()
-DeepSeti.prediction(model_location="encoder_injection_model(1).h5", test_location="data1.h5", 
+# NOTE: Loading the CUDDA model will require cudda supported devices + CUDDANN installed 
+# If you wish run without CUDDA accelerated devices use "encoder_injection_model(1).h5" INSTEAD 
+DeepSeti.prediction(model_location="encoder_injection_model_cudda.h5", test_location="data1.h5", 
                     anchor_location="data2.h5", top_hits=4)
 
 ```
