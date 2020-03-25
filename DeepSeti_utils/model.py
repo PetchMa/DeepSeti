@@ -39,7 +39,7 @@ class model(object):
         self.shape_1 = (32,32)
 
     def encoder(self):
-        if CuDNNLSTM:
+        if self.CuDNNLSTM:
             latent_dim = self.latent_dim
             time = int(self.data_shape[0])
             filters = self.layer_filters[1]*2
@@ -123,7 +123,7 @@ class model(object):
         return feature_encode
 
     def decoder(self):
-        if CuDNNLSTM:
+        if self.CuDNNLSTM:
             latent_inputs = Input(shape=(self.latent_dim,), name='decoder_input')
             x = Dense(64)(latent_inputs)
             x = LeakyReLU(alpha=0.2)(x)
