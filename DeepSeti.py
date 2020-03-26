@@ -48,7 +48,7 @@ class DeepSeti(object):
             save = save_model()
             save.save(train)
 
-    def prediction(self, model_location, test_location, anchor_location, top_hits):
+    def prediction(self, model_location, test_location, anchor_location, top_hits, target_name):
 
         dp = DataProcessing()
         anchor = dp.load_data(anchor_location)
@@ -65,9 +65,10 @@ class DeepSeti(object):
         
         for i in range(0,top_hits):
             fig = plt.figure(figsize=(10, 6))
+            plt.title('')
             plt.imshow(self.test[self.hits[i],:,0,:], aspect='auto')
             plt.colorbar()
-            fig.savefig("top_hit"+str(i)+".PNG", bbox_inches='tight')
+            fig.savefig("file-"+str(target_name)+"index_"+str(self.hits[i])+"_hit_"+str(i)+".PNG", bbox_inches='tight')
 
 
 
