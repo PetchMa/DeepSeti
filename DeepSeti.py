@@ -67,7 +67,7 @@ class DeepSeti(object):
             plt.title('')
             plt.imshow(self.test[self.hits[i],:,0,:], aspect='auto')
             plt.colorbar()
-            plt.title("file-"+str(target_name)+"index_"+str(self.hits[i])+"_hit_"+str(i)+".PNG")
+            plt.title(str(target_name.replace('.h5','_'))+"index_"+str(self.hits[i])+"_hit_"+str(i)+".PNG")
             fig.savefig(output_folder+"file-"+str(target_name)+"index_"+str(self.hits[i])+"_hit_"+str(i)+".PNG", bbox_inches='tight')
 
 
