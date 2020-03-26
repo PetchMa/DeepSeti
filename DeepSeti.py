@@ -48,13 +48,12 @@ class DeepSeti(object):
             save = save_model()
             save.save(train)
 
-    def prediction(self, model_location, test_location, anchor_location, top_hits, target_name):
+    def prediction(self, model_location, test_location, anchor_location, top_hits, target_name, output_folder):
 
         dp = DataProcessing()
         anchor = dp.load_data(anchor_location)
         self.test = dp.load_data(test_location)
         predict = prediction_algo(anchor = anchor , test=self.test, model_location=model_location)
-        # predict(anchor = anchor , test=self.test, model_location=model_location)
         self.values = predict.compute_distance()
         self.hits = predict.max_index(top_hits)
         
@@ -68,7 +67,8 @@ class DeepSeti(object):
             plt.title('')
             plt.imshow(self.test[self.hits[i],:,0,:], aspect='auto')
             plt.colorbar()
-            fig.savefig("file-"+str(target_name)+"index_"+str(self.hits[i])+"_hit_"+str(i)+".PNG", bbox_inches='tight')
+            plt.title("file-"+str(target_name)+"index_"+str(self.hits[i])+"_hit_"+str(i)+".PNG")
+            fig.savefig(output_folder+"file-"+str(target_name)+"index_"+str(self.hits[i])+"_hit_"+str(i)+".PNG", bbox_inches='tight')
 
 
 
