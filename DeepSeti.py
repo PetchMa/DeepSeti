@@ -41,9 +41,9 @@ class DeepSeti(object):
                     , X_test_unsupervised=self.X_test_unsupervised
                     , X_train_supervised=self.X_train_supervised
                     , X_test_supervised=self.X_test_supervised
-                    , y_train_supervised=self.y_train_supervised,
-                    y_test_supervised=self.y_test_supervised,
-                    batch_size=batch)
+                    , y_train_supervised=self.y_train_supervised
+                    , y_test_supervised=self.y_test_supervised
+                    , batch_size=batch)
         if save_file:
             save = save_model()
             save.save(train)
@@ -67,7 +67,7 @@ class DeepSeti(object):
             plt.title('')
             plt.imshow(self.test[self.hits[i],:,0,:], aspect='auto')
             plt.colorbar()
-            plt.title(str(target_name.replace('.h5','_'))+"index_"+str(self.hits[i])+"_hit_"+str(i)+".PNG")
+            plt.title(str(target_name.replace('mid.h5','_'))+"index_"+str(self.hits[i])+"_hit_"+str(i)+".PNG")
             fig.savefig(output_folder+"file-"+str(target_name)+"index_"+str(self.hits[i])+"_hit_"+str(i)+".PNG", bbox_inches='tight')
 
 
