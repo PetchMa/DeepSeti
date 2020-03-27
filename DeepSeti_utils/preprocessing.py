@@ -51,7 +51,6 @@ class DataProcessing(object):
             total_samples = 8*int(data.shape[2]/32)
             data = np.zeros((8*int(data.shape[2]/32),32,1,32))
             
-            # print(data6.shape)
             i=0
             count=0
             
