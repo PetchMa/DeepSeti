@@ -17,10 +17,10 @@ from keras.callbacks import EarlyStopping, ModelCheckpoint
 
 class predict(object):
 
-    def __init__(self, anchor, test, model_location):
+    def __init__(self, anchor, test, model_loaded):
         self.anchor = anchor
         self.test = test
-        self.encoder_injected = load_model(model_location)
+        self.encoder_injected = model_loaded
         self.values= np.zeros(self.test.shape[0])
 
     def compute_distance(self):

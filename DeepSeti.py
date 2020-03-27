@@ -8,8 +8,8 @@ from keras.models import load_model
 from keras.models import Model
 from keras.layers import Input
 import pylab as plt
-
 import keras 
+from keras.models import load_model
 
 class DeepSeti(object):
     def __init__(self):
@@ -47,13 +47,16 @@ class DeepSeti(object):
         if save_file:
             save = save_model()
             save.save(train)
+    
+    def load_model_function(self, model_location):
+        self.model_loaded = load_model(model_location)
 
-    def prediction(self, model_location, test_location, anchor_location, top_hits, target_name, output_folder):
+    def prediction(self, test_location, anchor_location, top_hits, target_name, output_folder):
 
         dp = DataProcessing()
         anchor = dp.load_data(anchor_location)
         self.test = dp.load_data(test_location)
-        predict = prediction_algo(anchor = anchor , test=self.test, model_location=model_location)
+        predict = prediction_algo(anchor = anchor , test=self.test, model_loaded=self.model_loaded)
         self.values = predict.compute_distance()
         self.hits = predict.max_index(top_hits)
         
