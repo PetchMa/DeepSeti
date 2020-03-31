@@ -10,6 +10,7 @@ from keras.layers import Input
 import pylab as plt
 import keras 
 from keras.models import load_model
+import numpy as np
 
 class DeepSeti(object):
     def __init__(self):
@@ -50,12 +51,21 @@ class DeepSeti(object):
     
     def load_model_function(self, model_location):
         self.model_loaded = load_model(model_location)
+    
+    def convert_np_to_mhz(self, np_index, f_stop,f_start, n_chans):
+        width = (f_stop-f_start)/n_chans
+        return width*np_index + f_stop
 
     def prediction(self, test_location, anchor_location, top_hits, target_name, output_folder):
 
+        dp_1 = DataProcessing()
+        anchor = dp_1.load_data(anchor_location)
         dp = DataProcessing()
-        anchor = dp.load_data(anchor_location)
         self.test = dp.load_data(test_location)
+        f_stop = dp.f_stop
+        f_start = dp.f_start
+        n_chan =dp.n_chans
+
         predict = prediction_algo(anchor = anchor , test=self.test, model_loaded=self.model_loaded)
         self.values = predict.compute_distance()
         self.hits = predict.max_index(top_hits)
@@ -70,8 +80,15 @@ class DeepSeti(object):
             plt.title('')
             plt.imshow(self.test[self.hits[i],:,0,:], aspect='auto')
             plt.colorbar()
-            plt.title(str(target_name.replace('mid.h5','_'))+"npIndex_"+str(int(self.hits[i]*4)-16)+'-'+str(int(self.hits[i]*4)+16)+"_hit_"+str(i))
-            fig.savefig(output_folder+"file-"+str(target_name)+"index_"+str(self.hits[i])+"_hit_"+str(i)+".PNG", bbox_inches='tight')
+            np_index_start = int(self.hits[i]*4)-16
+            np_index_end = int(self.hits[i]*4)+16
+            freq_start = self.convert_np_to_mhz(np_index =np_index_start , f_stop=f_stop,f_start=f_start, n_chans=n_chan)
+            freq_end = self.convert_np_to_mhz(np_index =np_index_end , f_stop=f_stop,f_start=f_start, n_chans=n_chan)
+            
+            np.save(str(target_name.replace('mid.h5','_'))+"npIndex_"+str(np_index_start)+"Freq_range_"+str(freq_start)+'-'+str(freq_end)+"_hit_"+str(i), self.test[self.hits[i],:,0,:]) 
+
+            plt.title(str(target_name.replace('mid.h5','_'))+"npIndex_"+str(np_index_start)+"Freq_range_"+str(freq_start)+'-'+str(freq_end)+"_hit_"+str(i))
+            fig.savefig(output_folder+"file-"+str(target_name.replace('mid.h5','_mid-h5_'))+"index_"+str(self.hits[i])+"_hit_"+str(i)+".PNG", bbox_inches='tight')
 
 
 

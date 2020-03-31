@@ -22,6 +22,9 @@ class DataProcessing(object):
     """
     def __init__(self):
         self.name = 'name'
+        self.f_stop = 0
+        self.f_start = 0
+        self.n_chans =0
 
     def load_data(self, file_location, normalize = True):
         start = time.time()
@@ -42,6 +45,10 @@ class DataProcessing(object):
             file_path =file_location
             obs = Waterfall(file_path, max_load=1)
             data = obs.data
+            self.f_stop = obs.container.f_stop
+            self.f_start = obs.container.f_start
+            self.n_chans =obs.header[b'nchans']
+            
             data_temp = np.zeros((8,32, 1, data.shape[2]))
             intervals = [0,32,64,96,128,160,192,224]
             count=0
