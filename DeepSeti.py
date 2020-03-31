@@ -11,6 +11,7 @@ import pylab as plt
 import keras 
 from keras.models import load_model
 import numpy as np
+import time as time 
 
 class DeepSeti(object):
     def __init__(self):
@@ -21,7 +22,6 @@ class DeepSeti(object):
         self.X_train_unsupervised, self.X_test_unsupervised = dp.load_multiple_files(list_directory=list_directory)
 
     def supervised_data(self, list_directory):
-        # self.X_train_unsupervised, self.X_test_unsupervised = self.unsupervised_data(list_directory= list_directory)
         synth = synthetic()
         self.X_train_supervised, self.X_test_supervised, self.y_train_supervised, self.y_test_supervised  = synth.generate(total_num_samples= 5000, 
                                                                                                                                 data = self.X_train_unsupervised[0:10000,:,:,:])
@@ -57,7 +57,7 @@ class DeepSeti(object):
         return width*np_index + f_stop
 
     def prediction(self, test_location, anchor_location, top_hits, target_name, output_folder):
-
+        
         dp_1 = DataProcessing()
         anchor = dp_1.load_data(anchor_location)
         dp = DataProcessing()
@@ -65,7 +65,7 @@ class DeepSeti(object):
         f_stop = dp.f_stop
         f_start = dp.f_start
         n_chan =dp.n_chans
-
+        start_time = time.time()
         predict = prediction_algo(anchor = anchor , test=self.test, model_loaded=self.model_loaded)
         self.values = predict.compute_distance()
         self.hits = predict.max_index(top_hits)
@@ -79,16 +79,19 @@ class DeepSeti(object):
             fig = plt.figure(figsize=(10, 6))
             plt.title('')
             plt.imshow(self.test[self.hits[i],:,0,:], aspect='auto')
+            plt.xlabel("fchans")
+            plt.ylabel("Time")
             plt.colorbar()
             np_index_start = int(self.hits[i]*4)-16
             np_index_end = int(self.hits[i]*4)+16
             freq_start = self.convert_np_to_mhz(np_index =np_index_start , f_stop=f_stop,f_start=f_start, n_chans=n_chan)
             freq_end = self.convert_np_to_mhz(np_index =np_index_end , f_stop=f_stop,f_start=f_start, n_chans=n_chan)
-            
-            np.save(str(target_name.replace('mid.h5','_'))+"npIndex_"+str(np_index_start)+"Freq_range_"+str(freq_start)+'-'+str(freq_end)+"_hit_"+str(i), self.test[self.hits[i],:,0,:]) 
 
-            plt.title(str(target_name.replace('mid.h5','_'))+"npIndex_"+str(np_index_start)+"Freq_range_"+str(freq_start)+'-'+str(freq_end)+"_hit_"+str(i))
-            fig.savefig(output_folder+"file-"+str(target_name.replace('mid.h5','_mid-h5_'))+"index_"+str(self.hits[i])+"_hit_"+str(i)+".PNG", bbox_inches='tight')
+            np.save(output_folder+"file-"+str(target_name.replace('mid.h5','_mid_h5_'))+"index_"+str(self.hits[i])+"_hit_"+str(i)+".npy", bbox_inches='tight') 
 
+            plt.title(str(target_name.replace('mid.h5','_mid_h5_'))+"npIndex_"+str(np_index_start)+"Freq_range_"+str(freq_start)+'-'+str(freq_end)+"_hit_"+str(i))
+            fig.savefig(output_folder+"file-"+str(target_name.replace('mid.h5','_mid_h5_'))+"Freq_range_"+str(freq_start)+'-'+str(freq_end)+"_hit_"+str(i)+".PNG", bbox_inches='tight')
+        delta_time = time.time()- start_time
+        print("Search time [s]:"+str(delta_time))
 
 
