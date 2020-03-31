@@ -87,10 +87,10 @@ class DeepSeti(object):
             freq_start = self.convert_np_to_mhz(np_index =np_index_start , f_stop=f_stop,f_start=f_start, n_chans=n_chan)
             freq_end = self.convert_np_to_mhz(np_index =np_index_end , f_stop=f_stop,f_start=f_start, n_chans=n_chan)
 
-            np.save(output_folder+"file-"+str(target_name.replace('mid.h5','_mid_h5_'))+"index_"+str(self.hits[i])+"_hit_"+str(i)+".npy", bbox_inches='tight') 
+            np.save(output_folder+"numpy_"+str(target_name.replace('mid.h5','_mid_h5_'))+"index_"+str(self.hits[i])+"_hit_"+str(i)+".npy", self.test[self.hits[i],:,:,:]) 
 
-            plt.title(str(target_name.replace('mid.h5','_mid_h5_'))+"npIndex_"+str(np_index_start)+"Freq_range_"+str(freq_start)+'-'+str(freq_end)+"_hit_"+str(i))
-            fig.savefig(output_folder+"file-"+str(target_name.replace('mid.h5','_mid_h5_'))+"Freq_range_"+str(freq_start)+'-'+str(freq_end)+"_hit_"+str(i)+".PNG", bbox_inches='tight')
+            plt.title(str(target_name.replace('mid.h5','_mid_h5_'))+"npIndex_"+str(np_index_start)+"_Freq_range_"+str(round(freq_start,4))+'-'+str(round(freq_end,4))+"_hit_"+str(i))
+            fig.savefig(output_folder+"image_"+str(target_name.replace('mid.h5','_mid_h5_'))+"Freq_range_"+str(round(freq_start,4))+'-'+str(round(freq_end,4))+"_hit_"+str(i)+".PNG", bbox_inches='tight')
         delta_time = time.time()- start_time
         print("Search time [s]:"+str(delta_time))
 
