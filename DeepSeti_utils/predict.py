@@ -27,7 +27,8 @@ class predict(object):
         check = self.encoder_injected.predict(self.test)
         anchor = self.encoder_injected.predict(self.anchor)
         for j in range(0, self.test.shape[0]-1):
-            index = int(random()*10)
+            # index = int(random()*10)
+            index = 5
             self.values[j]=(np.square(np.subtract(anchor[index:index+1,:], check[j:j+1,:]))).mean()   
         return self.values
     
