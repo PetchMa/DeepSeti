@@ -86,7 +86,6 @@ class DeepSeti(object):
             np_index_end = int(self.hits[i]*4)+16
             freq_start = self.convert_np_to_mhz(np_index =np_index_start , f_stop=f_stop,f_start=f_start, n_chans=n_chan)
             freq_end = self.convert_np_to_mhz(np_index =np_index_end , f_stop=f_stop,f_start=f_start, n_chans=n_chan)
-
             np.save(output_folder+"numpy_"+str(target_name.replace('mid.h5','_mid_h5_'))+"index_"+str(self.hits[i])+"_hit_"+str(i)+".npy", self.test[self.hits[i],:,:,:]) 
 
             plt.title(str(target_name.replace('mid.h5','_mid_h5_'))+"npIndex_"+str(np_index_start)+"_Freq_range_"+str(round(freq_start,4))+'-'+str(round(freq_end,4))+"_hit_"+str(i))
@@ -94,6 +93,44 @@ class DeepSeti(object):
         delta_time = time.time()- start_time
         print("Search time [s]:"+str(delta_time))
     
+    def prediction_compact(self, test_location, anchor_location, top_hits, target_name, output_folder):
+        
+        dp_1 = DataProcessing()
+        anchor = dp_1.load_data(anchor_location)
+        dp = DataProcessing()
+        self.test = dp.load_data(test_location)
+        f_stop = dp.f_stop
+        f_start = dp.f_start
+        n_chan =dp.n_chans
+        start_time = time.time()
+        predict = prediction_algo(anchor = anchor , test=self.test, model_loaded=self.model_loaded)
+        self.values = predict.compute_distance()
+        self.hits = predict.max_index(top_hits)
+        
+        fig = plt.figure(figsize=(20, 6))
+        plt.plot(self.values)
+        plt.xlabel("Number Of Samples")
+        plt.ylabel("Euclidean Distance")
+        
+        for i in range(0,top_hits):
+            fig = plt.figure(figsize=(10, 6))
+            plt.title('')
+            plt.imshow(self.test[self.hits[i],:,0,:], aspect='auto')
+            plt.xlabel("fchans")
+            plt.ylabel("Time")
+            plt.colorbar()
+            np_index_start = int(self.hits[i]*4)-16
+            np_index_end = int(self.hits[i]*4)+16
+            freq_start = self.convert_np_to_mhz(np_index =np_index_start , f_stop=f_stop,f_start=f_start, n_chans=n_chan)
+            freq_end = self.convert_np_to_mhz(np_index =np_index_end , f_stop=f_stop,f_start=f_start, n_chans=n_chan)
+            if i==top_hits:
+                np.save(output_folder+"numpy_"+str(target_name.replace('mid.h5','_mid_h5_'))+"index_"+str(self.hits[i])+"_hit_"+str(i)+".npy", self.test[:,:,:,:]) 
+
+            plt.title(str(target_name.replace('mid.h5','_mid_h5_'))+"npIndex_"+str(np_index_start)+"_Freq_range_"+str(round(freq_start,4))+'-'+str(round(freq_end,4))+"_hit_"+str(i))
+            fig.savefig(output_folder+"image_"+str(target_name.replace('mid.h5','_mid_h5_'))+"Freq_range_"+str(round(freq_start,4))+'-'+str(round(freq_end,4))+"_hit_"+str(i)+".PNG", bbox_inches='tight')
+        delta_time = time.time()- start_time
+        print("Search time [s]:"+str(delta_time))
+
     def prediction_numpy(self, numpy_data, list_names, anchor_location, top_hits, output_folder):
         dp_1 = DataProcessing()
         anchor = dp_1.load_data(anchor_location)
