@@ -83,9 +83,7 @@ class DataProcessing(object):
     def load_multiple_files(self, list_directory, normalize=None, test_image = False):
         """
         Load multiple data files. Uses single loading method to handle data processing
-
         Takes in a list that contains multiple directories. 
-
         returns a numpy array with normalized data
         """
         num_files = len(list_directory)
@@ -103,4 +101,3 @@ class DataProcessing(object):
         unsupervised_temp = shuffle(data[1:,:,:,:], random_state=3)
         X_train_unsupervised, X_test_unsupervised, y_train_unsupervised, y_test_unsupervised = train_test_split(unsupervised_temp, unsupervised_temp, test_size=0.2, random_state=2)
         return X_train_unsupervised, X_test_unsupervised
-        # return data[1:,:,:,:]
