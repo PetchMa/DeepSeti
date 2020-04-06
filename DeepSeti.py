@@ -94,7 +94,7 @@ class DeepSeti(object):
         delta_time = time.time()- start_time
         print("Search time [s]:"+str(delta_time))
     
-    def prediction_numpy(self, numpy_data, list_names, anchor_location, top_hits, target_name, output_folder):
+    def prediction_numpy(self, numpy_data, list_names, anchor_location, top_hits, output_folder):
         dp_1 = DataProcessing()
         anchor = dp_1.load_data(anchor_location)
         dp = DataProcessing()
@@ -116,9 +116,9 @@ class DeepSeti(object):
             plt.xlabel("fchans")
             plt.ylabel("Time")
             plt.colorbar()
-            np.save(output_folder+list_names[self.hits[i]], self.test[self.hits[i],:,:,:]) 
+            np.save(output_folder+"FILTERED-"+list_names[self.hits[i]], self.test[self.hits[i],:,:,:]) 
             plt.title(str(list_names[self.hits[i]]))
-            fig.savefig(output_folder+list_names[self.hits[i]]+"PNG", bbox_inches='tight')
+            fig.savefig(output_folder+"FILTERED-"+list_names[self.hits[i]]+".PNG", bbox_inches='tight')
         delta_time = time.time()- start_time
         print("Search time [s]:"+str(delta_time))
 
