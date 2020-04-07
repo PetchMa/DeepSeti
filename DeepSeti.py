@@ -56,7 +56,7 @@ class DeepSeti(object):
         width = (f_stop-f_start)/n_chans
         return width*np_index + f_start
 
-    def prediction(self, test_location, anchor_location, top_hits, target_name, output_folder):
+    def prediction(self, test_location, anchor_location, top_hits, target_name, output_folder, numpy_folder):
         dp_1 = DataProcessing()
         anchor = dp_1.load_data(anchor_location)
         dp = DataProcessing()
@@ -85,7 +85,7 @@ class DeepSeti(object):
             np_index_end = int(self.hits[i]*4)+16
             freq_start = self.convert_np_to_mhz(np_index =np_index_start , f_stop=f_stop,f_start=f_start, n_chans=n_chan)
             freq_end = self.convert_np_to_mhz(np_index =np_index_end , f_stop=f_stop,f_start=f_start, n_chans=n_chan)
-            np.save(output_folder+"numpy_"+str(target_name.replace('mid.h5','mid_h5_'))+"index_"+str(np_index_start+16)+"_hit_"+str(i)+".npy", self.test[self.hits[i],:,:,:]) 
+            np.save(numpy_folder+"numpy_"+str(target_name.replace('mid.h5','mid_h5_'))+"index_"+str(np_index_start+16)+"_hit_"+str(i)+".npy", self.test[self.hits[i],:,:,:]) 
             plt.title(str(target_name.replace('mid.h5','_mid_h5_'))+"npIndex_"+str(np_index_start+16)+"_Freq_range_"+str(round(freq_start,7))+'_'+"Width_"+str((f_stop-f_start)/n_chan)+"_hit_"+str(i))
             fig.savefig(output_folder+"image_"+str(target_name.replace('mid.h5','_mid_h5_'))+"Freq_range_"+str(round(freq_start,7))+'-'+str(round(freq_end,7))+"_hit_"+str(i)+".PNG", bbox_inches='tight')
         delta_time = time.time()- start_time
