@@ -121,8 +121,8 @@ class DeepSeti(object):
         print("Search time [s]:"+str(delta_time))
         
     def feature_similarity(self, test_location, anchor_location, top_hits, target_name, output_folder, numpy_folder):
-        dp_1 = DataProcessing()
-        anchor = dp_1.load_data(anchor_location)
+
+        anchor = np.load(anchor_location)
         dp = DataProcessing()
         self.test = dp.load_data(test_location)
         f_stop = dp.f_stop
