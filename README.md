@@ -33,6 +33,14 @@ The example detection is made by taking the MSE / euclidean distance between the
 <img src="https://github.com/PetchMa/DeepSeti/blob/master/assets/image%20(5).png">
 </p>
 
+# First Round 2 Terabytes Search @BreakthroughListen - April 08 2020
+With the first round execution, the algorithm searched through the first 2 terabytes worth of Breakthrough listen Data in search for signs of "intelligence". Over the 20 hour compute time,
+this signal was perhaps the strangest amongst its finds! Further analysis needed. But promising search. 
+<p align="center"> 
+<img src="https://github.com/PetchMa/DeepSeti/blob/master/ex_anomaly/analysis.png">
+</p>
+If you are an astronomer and would like to want to see the results of the first round searches, checkout the folder titled first round! The complete csv is also avliable. 
+
 # How To Use The Algorithm 
 
 Some features are still under construction, however you can test the current powers of this algorithm following this simple guide below. ** Note: This will require Blimpy and Setigen to opperate properly.** Install these requirements by running the following commands in the terminal in your python enviroment. 
