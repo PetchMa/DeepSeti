@@ -41,6 +41,9 @@ this signal was perhaps the strangest amongst its finds! Further analysis needed
 </p>
 If you are an astronomer and would like to want to see the results of the first round searches, checkout the folder titled first round! The complete csv is also avliable. 
 
+# Round 2 -  4 Terabytes Search - Coming soon!
+Updates coming soon!!
+
 # How To Use The Algorithm 
 
 Some features are still under construction, however you can test the current powers of this algorithm following this simple guide below. ** Note: This will require Blimpy and Setigen to opperate properly.** Install these requirements by running the following commands in the terminal in your python enviroment. 
