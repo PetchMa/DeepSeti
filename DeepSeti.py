@@ -65,9 +65,9 @@ class DeepSeti(object):
         f_start = dp.f_start
         n_chan =dp.n_chans
         start_time = time.time()
-        predict = prediction_algo(anchor = anchor , test=self.test, model_loaded=self.model_loaded, )
+        predict = prediction_algo(anchor = anchor , test=self.test, model_loaded=self.model_loaded )
         self.values = predict.compute_distance()
-        self.hits = predict.max_index(top_hits, f_start=f_start, f_stop=f_stop,n_chan_width=n_chan)
+        self.hits = predict.max_index( f_start=f_start, f_stop=f_stop, n_chan_width=n_chan, top = top_hits)
 
         fig = plt.figure(figsize=(20, 6))
         plt.plot(self.values)
@@ -100,7 +100,7 @@ class DeepSeti(object):
         start_time = time.time()
         predict = prediction_algo(anchor = anchor , test=self.test, model_loaded=self.model_loaded)
         self.values = predict.compute_distance()
-        self.hits = predict.max_index(top_hits)
+        self.hits = predict.max_index_nofilter(top_hits)
         
         fig = plt.figure(figsize=(20, 6))
         plt.plot(self.values)

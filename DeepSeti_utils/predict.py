@@ -59,6 +59,14 @@ class predict(object):
                 i+=1
             copy[hit]=0
         return top_hits
+    def max_index_nofilter(self, top=3):
+        top_hits = []
+        copy = self.values
+        for i in range(0, top):
+            hit = np.argmax(copy)
+            top_hits.append(hit)
+            copy[hit]=0
+        return top_hits
 
     def min_index(self, top=3):
         """
