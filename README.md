@@ -17,30 +17,33 @@ What makes this algorithm unique is that it *injects* an encoder, thats been pre
 *Reference diagram below*
 
 <p align="center"> 
-<img src="https://github.com/PetchMa/DeepSeti/blob/master/assets/image%20(3).png">
+    <img src="https://github.com/PetchMa/DeepSeti/blob/master/assets/image%20(3).png">
 </p>
 
 # Preliminary - Results 
 From current tests done on new data, it was able to generalize to a variety of usecases. The image below shows how sensitive the algorithm is to small and weak beams across multiple channels. Despite never being trained on the sinusoid beam on the left [sample A], it was able to detect the anomaly out of the dataset. This shows promise in the intended use case of the algorithm. 
 
 <p align="center"> 
-<img src="https://github.com/PetchMa/DeepSeti/blob/master/assets/image%20(4).png">
+    <img src="https://github.com/PetchMa/DeepSeti/blob/master/assets/image%20(4).png">
 </p>
 
 The example detection is made by taking the MSE / euclidean distance between the two vectors, an anchor vector and a unknown vector. These spikes within the data are seen as anomolies by the algorithm giving us these two detections. 
 
 <p align="center"> 
-<img src="https://github.com/PetchMa/DeepSeti/blob/master/assets/image%20(5).png">
+    <img src="https://github.com/PetchMa/DeepSeti/blob/master/assets/image%20(5).png">
 </p>
 
 # Round 1 -  2 Terabytes Search @BreakthroughListen April 08 2020
 With the first round execution, the algorithm searched through the first 2 terabytes worth of Breakthrough listen Data in search for signs of "intelligence". Over the 20 hour compute time,
 this signal was perhaps the strangest amongst its finds! Further analysis needed. But promising search. 
 <p align="center"> 
-<img src="https://github.com/PetchMa/DeepSeti/blob/master/round_1_2020-04-08/analysis.png">
+    <img src="https://github.com/PetchMa/DeepSeti/blob/master/round_1_2020-04-08/analysis.png">
 </p>
-If you are an astronomer and would like to want to see the results of the first round searches, checkout the folder titled first round! The complete csv is also avliable. 
-
+If you are an astronomer and would like to want to see the results of the first round searches, checkout the folder titled first round! The complete csv is also avliable. Here is an animation of some of the key
+signals the algorithm picked out! 
+<p align="center"> 
+    <img src="https://github.com/PetchMa/DeepSeti/blob/master/round_1_2020-04-08/animation.gif">
+</p>
 # Round 2 -  4 Terabytes Search - Coming soon!
 Updates coming soon!!
 
