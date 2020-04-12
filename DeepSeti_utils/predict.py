@@ -17,10 +17,13 @@ from  copy import deepcopy
 
 class predict(object):
 
-    def __init__(self, anchor, test, model_loaded):
+    def __init__(self, anchor, test, model_loaded, f_start, f_stop, n_chan_width):
         self.anchor = anchor
         self.test = test
         self.encoder_injected = model_loaded
+        self.f_start = f_start
+        self.f_stop = f_stop 
+        self.n_chan_width = n_chan_width
         self.values= np.zeros(self.test.shape[0])
 
     def compute_distance(self):
@@ -38,10 +41,15 @@ class predict(object):
     
     def max_index(self, top=3):
         top_hits = []
+        f_chan_low = [1190,2290]
+        f_chan_high = [1350, 2360]
         copy = deepcopy(self.values)
-        for i in range(0, top):
+        i=0
+        while i <top:
             hit = np.argmax(copy)
-            top_hits.append(hit)
+            if hit< f_chan_low[0] or (hit> f_chan_high[0] and hit< f_chan_low[1]) or hit>f_chan_high[1]:
+                top_hits.append(hit)
+                i+=1
             copy[hit]=0
         return top_hits
 
