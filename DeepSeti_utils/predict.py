@@ -17,13 +17,13 @@ from  copy import deepcopy
 
 class predict(object):
 
-    def __init__(self, anchor, test, model_loaded, f_start, f_stop, n_chan_width):
+    def __init__(self, anchor, test, model_loaded):
         self.anchor = anchor
         self.test = test
+        self.f_start = 0
+        self.f_stop = 0 
+        self.n_chan_width = 0
         self.encoder_injected = model_loaded
-        self.f_start = f_start
-        self.f_stop = f_stop 
-        self.n_chan_width = n_chan_width
         self.values= np.zeros(self.test.shape[0])
 
     def compute_distance(self):
@@ -38,8 +38,14 @@ class predict(object):
             index = 0
             self.values[j]=(np.square(np.subtract(anchor[index:index+1,:], check[j:j+1,:]))).mean()   
         return self.values
-    
-    def max_index(self, top=3):
+    def convert_np_to_mhz(self, np_index, f_stop,f_start, n_chans):
+        width = (f_stop-f_start)/n_chans
+        return width*np_index + f_start
+
+    def max_index(self, f_start, f_stop, n_chan_width, top=3):
+        self.f_start = f_start
+        self.f_stop = f_stop 
+        self.n_chan_width = n_chan_width
         top_hits = []
         f_chan_low = [1190,2290]
         f_chan_high = [1350, 2360]
@@ -47,7 +53,8 @@ class predict(object):
         i=0
         while i <top:
             hit = np.argmax(copy)
-            if hit< f_chan_low[0] or (hit> f_chan_high[0] and hit< f_chan_low[1]) or hit>f_chan_high[1]:
+            hit_freq = self.convert_np_to_mhz(hit, self.f_start,self.f_start, self.n_chan_width)
+            if hit_freq< f_chan_low[0] or (hit_freq> f_chan_high[0] and hit_freq< f_chan_low[1]) or hit_freq>f_chan_high[1]:
                 top_hits.append(hit)
                 i+=1
             copy[hit]=0
