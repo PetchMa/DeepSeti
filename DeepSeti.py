@@ -67,8 +67,10 @@ class DeepSeti(object):
         start_time = time.time()
         predict = prediction_algo(anchor = anchor , test=self.test, model_loaded=self.model_loaded)
         self.values = predict.compute_distance()
+      
         self.hits = predict.max_index(top_hits)
         
+
         fig = plt.figure(figsize=(20, 6))
         plt.plot(self.values)
         plt.xlabel("Number Of Samples")
@@ -85,9 +87,9 @@ class DeepSeti(object):
             np_index_end = int(self.hits[i]*4)+16
             freq_start = self.convert_np_to_mhz(np_index =np_index_start , f_stop=f_stop,f_start=f_start, n_chans=n_chan)
             freq_end = self.convert_np_to_mhz(np_index =np_index_end , f_stop=f_stop,f_start=f_start, n_chans=n_chan)
-            np.save(numpy_folder+"numpy_"+str(target_name.replace('mid.h5','mid_h5_'))+"index_"+str(np_index_start+16)+"_hit_"+str(i)+".npy", self.test[self.hits[i],:,:,:]) 
-            plt.title(str(target_name.replace('mid.h5','_mid_h5_'))+"npIndex_"+str(np_index_start+16)+"_Freq_range_"+str(round(freq_start,7))+'_'+"Width_"+str((f_stop-f_start)/n_chan)+"_hit_"+str(i))
-            fig.savefig(output_folder+"image_"+str(target_name.replace('mid.h5','_mid_h5_'))+"Freq_range_"+str(round(freq_start,7))+'-'+str(round(freq_end,7))+"_hit_"+str(i)+".PNG", bbox_inches='tight')
+            np.save(numpy_folder+"numpy_"+str(target_name.replace('mid.h5','mid_h5_'))+"index_"+str(np_index_start+16)+"_hit_"+str(i)+"_conf:"+str(self.values[self.hits[i]])+".npy", self.test[self.hits[i],:,:,:]) 
+            plt.title(str(target_name.replace('mid.h5','_mid_h5_'))+"npIndex_"+str(np_index_start+16)+"_Freq_range_"+str(round(freq_start,7))+'_'+"Width_"+str((f_stop-f_start)/n_chan)+"_conf:"+str(self.values[self.hits[i]])+"_hit_"+str(i))
+            fig.savefig(output_folder+"image_"+str(target_name.replace('mid.h5','_mid_h5_'))+"Freq_range_"+str(round(freq_start,7))+'-'+str(round(freq_end,7))+"_conf:"+str(self.values[self.hits[i]])+"_hit_"+str(i)+".PNG", bbox_inches='tight')
         delta_time = time.time()- start_time
         print("Search time [s]:"+str(delta_time))
     
@@ -131,6 +133,7 @@ class DeepSeti(object):
         start_time = time.time()
         predict = prediction_algo(anchor = anchor , test=self.test, model_loaded=self.model_loaded)
         self.values = predict.compute_distance()
+        
         self.hits = predict.min_index(top_hits)
 
         fig = plt.figure(figsize=(20, 6))

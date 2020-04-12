@@ -13,7 +13,7 @@ from keras.models import Model
 from keras import backend as K
 from random import random
 from keras.callbacks import EarlyStopping, ModelCheckpoint
-
+from  copy import deepcopy
 
 class predict(object):
 
@@ -38,7 +38,7 @@ class predict(object):
     
     def max_index(self, top=3):
         top_hits = []
-        copy = self.values
+        copy = deepcopy(self.values)
         for i in range(0, top):
             hit = np.argmax(copy)
             top_hits.append(hit)
@@ -51,7 +51,7 @@ class predict(object):
         This implements the same logic as the max_index search.
         """
         top_hits = []
-        copy = self.values
+        copy = deepcopy(self.values)
         for i in range(0, top):
             hit = np.argmin(copy)
             top_hits.append(hit)

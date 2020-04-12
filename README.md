@@ -37,9 +37,15 @@ The example detection is made by taking the MSE / euclidean distance between the
 With the first round execution, the algorithm searched through the first 2 terabytes worth of Breakthrough listen Data in search for signs of "intelligence". Over the 20 hour compute time,
 this signal was perhaps the strangest amongst its finds! Further analysis needed. But promising search. 
 <p align="center"> 
-<img src="https://github.com/PetchMa/DeepSeti/blob/master/round_1_2020-04-08/analysis.png">
+    <img src="https://github.com/PetchMa/DeepSeti/blob/master/round_1_2020-04-08/analysis.png">
 </p>
 If you are an astronomer and would like to want to see the results of the first round searches, checkout the folder titled first round! The complete csv is also avliable. 
+<p align="center"> 
+    <img src="https://github.com/PetchMa/DeepSeti/blob/master/assets/animation.gif">
+</p>
+
+
+
 
 # Round 2 -  4 Terabytes Search - Coming soon!
 Updates coming soon!!
