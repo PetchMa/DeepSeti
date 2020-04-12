@@ -42,7 +42,7 @@ this signal was perhaps the strangest amongst its finds! Further analysis needed
 If you are an astronomer and would like to want to see the results of the first round searches, checkout the folder titled first round! The complete csv is also avliable. Here is an animation of some of the key
 signals the algorithm picked out! 
 <p align="center"> 
-    <img src="https://github.com/PetchMa/DeepSeti/blob/master/round_1_2020-04-08/animation.gif">
+    <img src="https://github.com/PetchMa/DeepSeti/blob/master/assets/animation.gif">
 </p>
 # Round 2 -  4 Terabytes Search - Coming soon!
 Updates coming soon!!
