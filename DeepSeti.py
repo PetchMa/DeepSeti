@@ -93,7 +93,7 @@ class DeepSeti(object):
                 [target_name.replace('mid.h5','mid_h5_')],
                 [np_index_start+16],
                 [freq_start],
-                [(f_stop-f_start)/n_chans],
+                [(f_stop-f_start)/n_chan],
                 [self.values[self.hits[i]]] 
             ]
             return_data.append(single_search)
