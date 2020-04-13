@@ -82,6 +82,7 @@ class DeepSeti(object):
             plt.xlabel("fchans")
             plt.ylabel("Time")
             plt.colorbar()
+            
             np_index_start = int(self.hits[i]*4)-16
             np_index_end = int(self.hits[i]*4)+16
             freq_start = self.convert_np_to_mhz(np_index =np_index_start , f_stop=f_stop,f_start=f_start, n_chans=n_chan)
@@ -89,6 +90,7 @@ class DeepSeti(object):
             np.save(numpy_folder+"numpy_"+str(target_name.replace('mid.h5','mid_h5_'))+"index_"+str(np_index_start+16)+"_hit_"+str(i)+"_conf:"+str(self.values[self.hits[i]])+".npy", self.test[self.hits[i],:,:,:]) 
             plt.title(str(target_name.replace('mid.h5','_mid_h5_'))+"npIndex_"+str(np_index_start+16)+"_Freq_range_"+str(round(freq_start,7))+'_'+"Width_"+str((f_stop-f_start)/n_chan)+"_conf:"+str(self.values[self.hits[i]])+"_hit_"+str(i))
             fig.savefig(output_folder+"image_"+str(target_name.replace('mid.h5','_mid_h5_'))+"Freq_range_"+str(round(freq_start,7))+'-'+str(round(freq_end,7))+"_conf:"+str(self.values[self.hits[i]])+"_hit_"+str(i)+".PNG", bbox_inches='tight')
+            plt.close(fig)
             single_search = [[
                 target_name.replace('mid.h5','mid_h5_'),
                 np_index_start+16,
