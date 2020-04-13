@@ -90,11 +90,11 @@ class DeepSeti(object):
             plt.title(str(target_name.replace('mid.h5','_mid_h5_'))+"npIndex_"+str(np_index_start+16)+"_Freq_range_"+str(round(freq_start,7))+'_'+"Width_"+str((f_stop-f_start)/n_chan)+"_conf:"+str(self.values[self.hits[i]])+"_hit_"+str(i))
             fig.savefig(output_folder+"image_"+str(target_name.replace('mid.h5','_mid_h5_'))+"Freq_range_"+str(round(freq_start,7))+'-'+str(round(freq_end,7))+"_conf:"+str(self.values[self.hits[i]])+"_hit_"+str(i)+".PNG", bbox_inches='tight')
             single_search = [
-                [target_name.replace('mid.h5','mid_h5_')],
-                [np_index_start+16],
-                [freq_start],
-                [(f_stop-f_start)/n_chan],
-                [self.values[self.hits[i]]] 
+                target_name.replace('mid.h5','mid_h5_'),
+                np_index_start+16,
+                freq_start,
+                (f_stop-f_start)/n_chan,
+                self.values[self.hits[i]] 
             ]
             return_data.append(single_search)
         delta_time = time.time()- start_time
