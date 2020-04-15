@@ -70,7 +70,7 @@ class DeepSeti(object):
         n_chan =dp.n_chans
         start_time = time.time()
         predict = prediction_algo(test=self.test, model_loaded=self.model_loaded )
-        self.values = predict.compute_distance_preloaded(check = self.anchor_value)
+        self.values = predict.compute_distance_preloaded(anchor = self.anchor_value)
         self.hits = predict.max_index( f_start=f_start, f_stop=f_stop, n_chan_width=n_chan, top = top_hits)
 
         return_data =[]

@@ -22,12 +22,12 @@ class predict(object):
         self.encoder_injected = model_loaded
         self.values= np.zeros(self.test.shape[0])
     
-    def compute_distance_preloaded(self, check):
+    def compute_distance_preloaded(self, anchor):
         """
         Method helps compute the MSE between two N-d vectors and is used to make the
         Helps facilitate fast computation.                 
         """
-        anchor = self.encoder_injected.predict(self.anchor)
+        check = self.encoder_injected.predict(self.test)
         for j in range(0, self.test.shape[0]-1):
             # index = int(random()*10)
             index = 0
