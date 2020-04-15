@@ -27,7 +27,7 @@ class predict(object):
         Method helps compute the MSE between two N-d vectors and is used to make the
         Helps facilitate fast computation.                 
         """
-        print(self.encoder_injected.predict(self.test).shape)
+        
         check = self.encoder_injected.predict(self.test)
         anchor = self.encoder_injected.predict(self.anchor)
         for j in range(0, self.test.shape[0]-1):
