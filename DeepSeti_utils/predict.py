@@ -13,7 +13,7 @@ import cupy as cp
 
 class predict(object):
 
-    def __init__(self, anchor, test, model_loaded):
+    def __init__(self, test, model_loaded, anchor=None):
         self.anchor = anchor
         self.test = test
         self.f_start = 0

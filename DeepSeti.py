@@ -56,7 +56,7 @@ class DeepSeti(object):
     def load_anchor(self, anchor_location):
         dp_1 = DataProcessing()
         self.anchor = dp_1.load_data(anchor_location)
-        self.anchor_value = self.model_loaded.predict(self.test)
+        self.anchor_value = self.model_loaded.predict(self.anchor)
 
     def convert_index_to_mhz(self, np_index, f_stop,f_start, n_chans):
         width = (f_stop-f_start)/n_chans
@@ -69,7 +69,7 @@ class DeepSeti(object):
         f_start = dp.f_start
         n_chan =dp.n_chans
         start_time = time.time()
-        predict = prediction_algo(anchor = anchor , test=self.test, model_loaded=self.model_loaded )
+        predict = prediction_algo(test=self.test, model_loaded=self.model_loaded )
         self.values = predict.compute_distance_preloaded(check = self.anchor_value)
         self.hits = predict.max_index( f_start=f_start, f_stop=f_stop, n_chan_width=n_chan, top = top_hits)
 
