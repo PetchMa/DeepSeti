@@ -12,6 +12,7 @@ import keras
 from keras.models import load_model
 import numpy as np
 import time as time 
+import cupy as cp
 
 class DeepSeti(object):
     def __init__(self):
@@ -52,7 +53,7 @@ class DeepSeti(object):
     def load_model_function(self, model_location):
         self.model_loaded = load_model(model_location)
     
-    def convert_np_to_mhz(self, np_index, f_stop,f_start, n_chans):
+    def convert_index_to_mhz(self, np_index, f_stop,f_start, n_chans):
         width = (f_stop-f_start)/n_chans
         return width*np_index + f_start
 
@@ -69,11 +70,6 @@ class DeepSeti(object):
         self.values = predict.compute_distance()
         self.hits = predict.max_index( f_start=f_start, f_stop=f_stop, n_chan_width=n_chan, top = top_hits)
 
-        fig = plt.figure(figsize=(20, 6))
-        plt.plot(self.values)
-        plt.xlabel("Number Of Samples")
-        plt.ylabel("Euclidean Distance")
-        
         return_data =[]
         for i in range(0,top_hits):
             fig = plt.figure(figsize=(10, 6))
@@ -85,11 +81,56 @@ class DeepSeti(object):
             
             np_index_start = int(self.hits[i]*4)-16
             np_index_end = int(self.hits[i]*4)+16
-            freq_start = self.convert_np_to_mhz(np_index =np_index_start , f_stop=f_stop,f_start=f_start, n_chans=n_chan)
-            freq_end = self.convert_np_to_mhz(np_index =np_index_end , f_stop=f_stop,f_start=f_start, n_chans=n_chan)
+            freq_start = self.convert_index_to_mhz(np_index =np_index_start , f_stop=f_stop,f_start=f_start, n_chans=n_chan)
+            freq_end = self.convert_index_to_mhz(np_index =np_index_end , f_stop=f_stop,f_start=f_start, n_chans=n_chan)
             np.save(numpy_folder+"numpy_"+str(target_name.replace('mid.h5','mid_h5_'))+"index_"+str(np_index_start+16)+"_hit_"+str(i)+"_conf:"+str(self.values[self.hits[i]])+".npy", self.test[self.hits[i],:,:,:]) 
             plt.title(str(target_name.replace('mid.h5','_mid_h5_'))+"npIndex_"+str(np_index_start+16)+"_Freq_range_"+str(round(freq_start,7))+'_'+"Width_"+str((f_stop-f_start)/n_chan)+"_conf:"+str(self.values[self.hits[i]])+"_hit_"+str(i))
             fig.savefig(output_folder+"image_"+str(target_name.replace('mid.h5','_mid_h5_'))+"Freq_range_"+str(round(freq_start,7))+'-'+str(round(freq_end,7))+"_conf:"+str(self.values[self.hits[i]])+"_hit_"+str(i)+".PNG", bbox_inches='tight')
+            plt.close(fig)
+            single_search = [[
+                target_name.replace('mid.h5','mid_h5_'),
+                np_index_start+16,
+                freq_start,
+                (f_stop-f_start)/n_chan,
+                self.values[self.hits[i]] 
+            ]]
+            return_data.append(single_search)
+        delta_time = time.time()- start_time
+        print("Search time [s]:"+str(delta_time))
+        return return_data
+    
+    def prediction_cupy(self, test_location, anchor_location, top_hits, target_name, output_folder, numpy_folder):
+        dp_1 = DataProcessing()
+        anchor = dp_1.load_data_cupy(anchor_location)
+        dp = DataProcessing()
+        self.test = dp.load_data_cupy(test_location)
+        f_stop = dp.f_stop
+        f_start = dp.f_start
+        n_chan =dp.n_chans
+        start_time = time.time()
+        predict = prediction_algo(anchor = anchor , test=self.test, model_loaded=self.model_loaded )
+        self.values = predict.compute_distance_cupy()
+        self.hits = predict.max_index( f_start=f_start, f_stop=f_stop, n_chan_width=n_chan, top = top_hits)
+
+        return_data =[]
+        for i in range(0,top_hits):
+            fig = plt.figure(figsize=(10, 6))
+            plt.title('')
+            plt.imshow(cp.asnumpy(self.test[self.hits[i],:,0,:]), aspect='auto')
+            plt.xlabel("fchans")
+            plt.ylabel("Time")
+            plt.colorbar()
+            
+            np_index_start = int(self.hits[i]*4)-16
+            np_index_end = int(self.hits[i]*4)+16
+            freq_start = self.convert_index_to_mhz(np_index =np_index_start , f_stop=f_stop,f_start=f_start, n_chans=n_chan)
+            freq_end = self.convert_index_to_mhz(np_index =np_index_end , f_stop=f_stop,f_start=f_start, n_chans=n_chan)
+            cp.save(numpy_folder+"numpy_"+str(target_name.replace('mid.h5','mid_h5_'))+"index_"+str(np_index_start+16)+"_hit_"+
+            str(i)+"_conf:"+str(self.values[self.hits[i]])+".npy", self.test[self.hits[i],:,:,:]) 
+            plt.title(str(target_name.replace('mid.h5','_mid_h5_'))+"npIndex_"+str(np_index_start+16)+"_Freq_range_"+
+            str(round(freq_start,7))+'_'+"Width_"+str((f_stop-f_start)/n_chan)+"_conf:"+str(self.values[self.hits[i]])+"_hit_"+str(i))
+            fig.savefig(output_folder+"image_"+str(target_name.replace('mid.h5','_mid_h5_'))+"Freq_range_"+
+            str(round(freq_start,7))+'-'+str(round(freq_end,7))+"_conf:"+str(self.values[self.hits[i]])+"_hit_"+str(i)+".PNG", bbox_inches='tight')
             plt.close(fig)
             single_search = [[
                 target_name.replace('mid.h5','mid_h5_'),
@@ -113,11 +154,6 @@ class DeepSeti(object):
         predict = prediction_algo(anchor = anchor , test=self.test, model_loaded=self.model_loaded)
         self.values = predict.compute_distance()
         self.hits = predict.max_index_nofilter(top_hits)
-        
-        fig = plt.figure(figsize=(20, 6))
-        plt.plot(self.values)
-        plt.xlabel("Number Of Samples")
-        plt.ylabel("Euclidean Distance")
         
         for i in range(0,top_hits):
             fig = plt.figure(figsize=(10, 6))
@@ -143,13 +179,7 @@ class DeepSeti(object):
         start_time = time.time()
         predict = prediction_algo(anchor = anchor , test=self.test, model_loaded=self.model_loaded)
         self.values = predict.compute_distance()
-        
         self.hits = predict.min_index(top_hits)
-
-        fig = plt.figure(figsize=(20, 6))
-        plt.plot(self.values)
-        plt.xlabel("Number Of Samples")
-        plt.ylabel("Euclidean Distance")
 
         for i in range(0,top_hits):
             fig = plt.figure(figsize=(10, 6))
@@ -160,8 +190,8 @@ class DeepSeti(object):
             plt.colorbar()
             np_index_start = int(self.hits[i]*4)-16
             np_index_end = int(self.hits[i]*4)+16
-            freq_start = self.convert_np_to_mhz(np_index =np_index_start , f_stop=f_stop,f_start=f_start, n_chans=n_chan)
-            freq_end = self.convert_np_to_mhz(np_index =np_index_end , f_stop=f_stop,f_start=f_start, n_chans=n_chan)
+            freq_start = self.convert_index_to_mhz(np_index =np_index_start , f_stop=f_stop,f_start=f_start, n_chans=n_chan)
+            freq_end = self.convert_index_to_mhz(np_index =np_index_end , f_stop=f_stop,f_start=f_start, n_chans=n_chan)
             np.save(numpy_folder+"numpy_"+str(target_name.replace('mid.h5','mid_h5_'))+"index_"+
                 str(np_index_start+16)+"_hit_"+str(i)+".npy", self.test[self.hits[i],:,:,:]) 
             plt.title(str(target_name.replace('mid.h5','_mid_h5_'))+"npIndex_"+str(np_index_start+16)+"_Freq_range_"+
