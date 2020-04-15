@@ -9,6 +9,7 @@ from matplotlib import pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
 import cupy as cp
+import h5py
 
 class DataProcessing(object):
     """
@@ -44,8 +45,14 @@ class DataProcessing(object):
             return None
         else:
             file_path =file_location
-            obs = Waterfall(file_path, max_load=1)
-            data = obs.data
+            obs = Waterfall(file_path, load_data =False)
+            h5 = h5py.File(file_path, 'r')
+            self.chan_stop_idx = obs.container.chan_stop_idx
+            self.chan_start_idx = obs.container.chan_start_idx
+            self.t_start = obs.container.t_start
+            self.t_stop = obs.container.t_stop
+
+            data = h5["data"][self.t_start:self.t_stop,:,self.chan_start_idx:self.chan_stop_idx]
             self.f_stop = obs.container.f_stop
             self.f_start = obs.container.f_start
             self.n_chans =obs.header[b'nchans']
