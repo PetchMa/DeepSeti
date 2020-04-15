@@ -13,7 +13,7 @@ import cupy as cp
 
 class predict(object):
 
-    def __init__(self, anchor, test, model_loaded):
+    def __init__(self, test, model_loaded, anchor=None):
         self.anchor = anchor
         self.test = test
         self.f_start = 0
@@ -21,6 +21,18 @@ class predict(object):
         self.n_chan_width = 0
         self.encoder_injected = model_loaded
         self.values= np.zeros(self.test.shape[0])
+    
+    def compute_distance_preloaded(self, anchor):
+        """
+        Method helps compute the MSE between two N-d vectors and is used to make the
+        Helps facilitate fast computation.                 
+        """
+        check = self.encoder_injected.predict(self.test)
+        for j in range(0, self.test.shape[0]-1):
+            # index = int(random()*10)
+            index = 0
+            self.values[j]=(np.square(np.subtract(anchor[index:index+1,:], check[j:j+1,:]))).mean()   
+        return self.values
 
     def compute_distance(self):
         """
