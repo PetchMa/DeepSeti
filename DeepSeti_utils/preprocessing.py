@@ -8,6 +8,7 @@ from astropy import units as u
 from matplotlib import pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
+import cupy as cp
 
 class DataProcessing(object):
     """
@@ -57,6 +58,60 @@ class DataProcessing(object):
                 count+=1
             total_samples = 8*int(data.shape[2]/32)
             data = np.zeros((8*int(data.shape[2]/32),32,1,32))
+            
+            i=0
+            count=0
+            
+            while i<total_samples:
+                # print(data_temp[0,:,:,32*i:(i+1)*32].shape)
+                data[i,:,:,:]= data_temp[0,:,:,32*count:(1+count)*32]
+                data[i+1,:,:,:]= data_temp[1,:,:,32*count:(1+count)*32]
+                data[i+2,:,:,:]= data_temp[2,:,:,32*count:(1+count)*32]
+                data[i+3,:,:,:]= data_temp[3,:,:,32*count:(1+count)*32]
+                data[i+4,:,:,:]= data_temp[4,:,:,32*count:(1+count)*32]
+                data[i+5,:,:,:]= data_temp[5,:,:,32*count:(1+count)*32]
+                data[i+6,:,:,:]= data_temp[6,:,:,32*count:(1+count)*32]
+                data[i+7,:,:,:]= data_temp[7,:,:,32*count:(1+count)*32]
+                count+=1
+                i=i+8
+            
+            print("single Data load Execution: "+str(time.time()-start)+ " Sec")
+            
+            if normalize:
+                data = data/ 5906562547.712
+            return data
+    
+    def load_data_cupy(self, file_location, normalize = True):
+        start = time.time()
+        """
+        Single data file load. THIS USES CUDA AND CUPY FOR DATA PROCESSING 
+
+        - Splits channels into 32x1x32
+
+        Optional to normalize data. => Data is normalized by factor of 
+        5906562547.712 => empircally tested value to speed training. 
+
+        Returns numpy array
+        """
+
+        if file_location == 'none':
+            return None
+        else:
+            file_path =file_location
+            obs = Waterfall(file_path, max_load=1)
+            data = cp.array(obs.data)
+            self.f_stop = obs.container.f_stop
+            self.f_start = obs.container.f_start
+            self.n_chans =obs.header[b'nchans']
+            
+            data_temp = cp.zeros((8,32, 1, data.shape[2]))
+            intervals = [0,32,64,96,128,160,192,224]
+            count=0
+            for k in intervals: 
+                data_temp[count,:,:,:]=data[k:k+32,:,:]
+                count+=1
+            total_samples = 8*int(data.shape[2]/32)
+            data = cp.zeros((8*int(data.shape[2]/32),32,1,32))
             
             i=0
             count=0
